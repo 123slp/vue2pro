@@ -21,14 +21,28 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+html{
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+body{
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
 #app {
   width: 100%;
   height: 100%;
   background: black;
   header{
-    width: 100%;    
+    width: 100%;
     h3{
+      margin: 0;
+      padding: 0;
       width: 100%;
     background: saddlebrown;
     height: 84px;
@@ -42,6 +56,10 @@ export default {
   }
   section{
     width: 100%;
+    position: absolute;
+    left: 0;
+    top: 100px;
+    background: #ccc;
     margin: 84px 0 50px 0;
   }
   footer{
@@ -56,7 +74,8 @@ export default {
     display: flex;
     justify-content: space-around;
     a{
-
+      text-align: center;
+      outline: none;
     }
   }
 }

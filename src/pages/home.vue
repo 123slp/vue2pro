@@ -3,3 +3,8 @@
         <p>我是首页</p>
     </div>
 </template>
+<style lang="less" scoped>
+ p{
+     color: wheat
+ }
+</style>
