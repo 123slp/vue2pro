@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <form action="" enctype="multipart/form-data">
+    <input id="file" class="filepath" onchange="changepic(this)" type="file"><br>
+    <img src="" id="show" width="200">
+  </form>
+  <script>
+    function changepic() {
+      var reads = new FileReader();
+      f = document.getElementById('file').files[0];
+      reads.readAsDataURL(f);
+      reads.onload = function (e) {
+        document.getElementById('show').src = this.result;
+      };
+    }
+  </script>
+</body>
+
+</html>
