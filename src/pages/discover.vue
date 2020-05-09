@@ -3,7 +3,7 @@
     <div @click="clickevent">点我</div>
     <p>{{num}}</p>
     <p>我是发现{{num}}</p>
-    <input type="text" v-on:input="inquiry()" v-model="message" readonly>
+    <input type="text" v-on:input="inquiry()" v-model="message" readonly />
     <button @click="inquiry()" style="background:red">查询</button>
     <el-select v-model="selectVal" :automatic-dropdown="true">
       <el-option v-for="(item,index) in 10" :key="index" :label="item" :value="item"></el-option>
@@ -30,6 +30,11 @@
         </li>
       </ul>
     </div>
+    <el-select v-model="selectValue">
+      <el-option label="111" value="111"></el-option>
+      <el-option label="222" value="222"></el-option>
+      <p>添加</p>
+    </el-select>
   </div>
 </template>
 <script>
@@ -40,11 +45,20 @@ export default {
     return {
       selectVal: "",
       message: "星期一",
-      timeout: null
+      timeout: null,
+      arrdata: []
     };
   },
   computed: {
     ...mapState(["num"])
+  },
+  watch: {
+    arrdata() {
+      console.log("1111");
+    }
+  },
+  mounted() {
+    this.arrdata = [1];
   },
   methods: {
     ...mapActions(["getnum"]),

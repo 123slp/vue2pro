@@ -1,55 +1,37 @@
 <template>
   <div class="setting">
-    <p @click="show">我是设置{{session}}</p>
-    <el-table :data="tableData" width="100%">
-      <el-table-column type="expand">
-        <template slot-scope="props">
-          <el-form label-position="left" inline class="demo-table-expand">
-            <el-row style="width:100%">
-              <el-col>
-                <el-form-item label="商品名称">
-                  <span>{{ props.row.a }}</span>
-                </el-form-item>
-                <el-form-item label="所属店铺">
-                  <span>{{ props.row.b }}</span>
-                </el-form-item>
-                <el-form-item label="商品 ID">
-                  <span>{{ props.row.c }}</span>
-                </el-form-item>
-                <el-form-item label="店铺 ID">
-                  <span>{{ props.row.d }}</span>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="商品分类">
-                  <span>{{ props.row.e }}</span>
-                </el-form-item>
-                <el-form-item label="店铺地址">
-                  <span>{{ props.row.f }}</span>
-                </el-form-item>
-                <el-form-item label="商品描述">
-                  <span>{{ props.row.g }}</span>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-        </template>
-      </el-table-column>
-      <el-table-column prop="a" label="星期一"></el-table-column>
-      <el-table-column prop="b" label="星期二"></el-table-column>
-      <el-table-column prop="c" label="星期三"></el-table-column>
-      <el-table-column prop="d" label="星期四"></el-table-column>
-      <template slot="empty">
-        <p :style="{'marginTop': '23px'}">未查询到您的交易记录</p>
-      </template>
-    </el-table>
-    <Table :columns="columns" :data="data1"></Table>
+    <p @click="show" class="title">vuex</p>
+    <div class="storeState">
+      <div class="left">
+        <el-button type="primary" @click="getAction"></el-button>
+        <el-button @click="rootGomodule">root-module</el-button>
+        <p>mapstate:root部分，可以全局store-state-getters</p>
+        <p>root-state:---{{userName}}</p>
+        <p>module-test-tate:----{{moduleVisit}}</p>
+        <p>root-state-getter:----{{rootGetterCount}}</p>
+        <p>module-state-getter:----{{moduleGetterSum}}</p>
+        <p>mapgetters:root部分，不支持函数形式--可以全局的getters</p>
+        <p>root-getter:---{{getteremail}}</p>
+        <p>root-module-getter:---{{rootmodulename}}</p>
+        <p>mapgetters:module部分-只能获取模块下的getters</p>
+        <p>modules-getter:---{{moduleName}}</p>
+        <div class="threebox"></div>
+      </div>
+      <div class="right">
+        <div class="top">
+          <el-table :data="tableData" style="width:100%">
+            <el-table-column prop="date" label="日期" width="180"></el-table-column>
+            <el-table-column prop="name" label="姓名" width="180"></el-table-column>
+            <el-table-column prop="address" label="地址"></el-table-column>
+          </el-table>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import test from "./test";
+import { mapState, mapMutations, mapGetters, mapActions } from "vuex";
 export default {
   name: "setting",
   components: {
@@ -57,44 +39,99 @@ export default {
   },
   data() {
     return {
+      sum: 8,
+      msg: "2192530185qq.com",
       message: "2222",
       tableData: [
-        // {
-        //   a: "11",
-        //   b: "12",
-        //   c: "13",
-        //   d: "14",
-        //   e: "15",
-        //   f: "16",
-        //   g: "17"
-        // }
-      ],
-      columns: [
-        {
-          title: "name",
-          key: "name"
-        },
-        {
-          title: "age",
-          key: "age"
-        },
-        {
-          title: "height",
-          key: "height"
-        }
-      ],
-      data1: [
-        { name: "111", age: "222", height: "333" },
-        { name: "111", age: "222", height: "333" },
-        { name: "111", age: "222", height: "333" },
-        { name: "111", age: "222", height: "333" },
-        { name: "111", age: "222", height: "333" }
+        { name: "小小", date: "1212", address: "南山区" },
+        { name: "小小", date: "1212", address: "南山区" },
+        { name: "小小", date: "1212", address: "南山区" },
+        { name: "小小", date: "1212", address: "南山区" },
+        { name: "小小", date: "1212", address: "南山区" },
+        { name: "小小", date: "1212", address: "南山区" },
+        { name: "小小", date: "1212", address: "南山区" },
+        { name: "小小", date: "1212", address: "南山区" },
+        { name: "小小", date: "1212", address: "南山区" },
+        { name: "小小", date: "1212", address: "南山区" },
+        { name: "小小", date: "1212", address: "南山区" },
+        { name: "小小", date: "1212", address: "南山区" }
       ]
     };
   },
+  computed: {
+    // 繁琐的取值方式
+    vuexNum() {
+      return this.$store.state.num + this.sum;
+    },
+    // mapState辅助函数 root
+    // ...mapState(["user_info", "email"]), 常用方式
+    ...mapState({
+      userName: "user_info",
+      email: "email",
+      rootCount: state => state.count,
+      moduleVisit: state => state.test.visit, // "test.visit"(不可行)
+      rootGetterCount(state, getters) {
+        // 全局的store里面的state，getters
+        console.log("root-state", state, getters);
+        return getters.getCount + this.sum;
+      },
+      moduleGetterSum(state, getters) {
+        console.log("module-state", state, getters);
+        return getters["test/getSum"] + this.sum;
+      }
+    }),
+    // mapState辅助函数 modules
+    // ...mapState("test", ["visit"]), 常用方式
+    ...mapState("test", {
+      // 箭头函数可使代码更简练
+      testSum: state => state.sum, // testSum:"sum"(亦可)
+      // 为了能够使用 `this` 获取局部状态，必须使用常规函数
+      visitor(state, getters) {
+        // 模块的的state，getters
+        console.log("modules-state", state, getters);
+        return state.visit + this.sum;
+      }
+    }),
+    // mapGetters  root
+    // ...mapGetters(["changeName"]) ===等价于下列方式  不支持函数形式
+    ...mapGetters({
+      gettercount: "getCount",
+      getteremail: "getEmail",
+      rootmodulename: "test/getVisitName" // 获取模块下的getters
+    }),
+    // mapgetters   module
+    ...mapGetters("test", {
+      moduleName: "getVisitName"
+    })
+  },
   methods: {
+    // ...mapMutations(["setUser", "setMsg", "setNum"]),
+    ...mapMutations({
+      setUser: "setUser",
+      setMsg: "setMsg",
+      setNum: "setNum",
+      setName: "test/setName" // 可以获取到模块的mutations
+    }),
+    ...mapMutations("test", ["setVisit"]),
     show() {
-      console.log("111");
+      this.setUser("苏良平");
+      this.setVisit("小白兔,设置成功了");
+      this.setMsg("2192530185qq.com");
+      this.setNum(123);
+      this.setName("长江-黄河");
+      this.actionRoot(1, 2);
+    },
+    // action部分
+    ...mapActions({
+      actionRoot: "actionRoot",
+      rootTomodule: "rootTomodule",
+      actionRequest: "test/actionRequest"
+    }),
+    getAction() {
+      this.actionRequest(333); // 子模块触发root--action
+    },
+    rootGomodule() {
+      this.rootTomodule(); // root - action触发子模块的
     }
   },
   mounted() {
@@ -110,22 +147,43 @@ export default {
 
 <style lang="less" scoped>
 .setting {
-  /deep/.el-table {
-    .demo-table-expand {
-      font-size: 0;
+  display: flex;
+  overflow: auto;
+  flex: 1;
+  flex-direction: column;
+  .threebox{
+    width: 0;
+    height: 0;
+    border:50px solid transparent;
+    border-top: 50px solid #ccc;
+  }
+  .title {
+    height: 20px;
+    background: red;
+  }
+  .storeState {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    color: #fff;
+    overflow: auto;
+    .left {
+      flex: 1;
+      background: #000;
     }
-    .demo-table-expand label {
-      width: 90px;
-      color: #99a9bf;
-    }
-    .demo-table-expand .el-form-item {
-      margin-right: 0;
-      margin-bottom: 0;
-      width: 50%;
+    .right {
+      flex: 1;
+      background: #ccc;
+      overflow: auto;
+      position: relative;
+      .top {
+        height: 100%;
+        /deep/.el-table {
+          max-height: 100%;
+          overflow: auto;
+        }
+      }
     }
   }
-}
-p {
-  color: wheat;
 }
 </style>

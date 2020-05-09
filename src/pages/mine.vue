@@ -1,104 +1,116 @@
 <template>
-  <div>
-    <p @click="changeAct">我是我的</p>
-    <ul>
-      <li v-for="(item,index) in this.jsona" :key="index">
-        <p>{{item.a}}</p>
-        <p>{{item.b}}</p>
-        <p>{{item.c}}</p>
-      </li>
-    </ul>
-    <div class="box"></div>
-    <div class="box2" @click="listFunc" style="width;50px;height:50px;background:blue;"></div>
-    <el-upload
-      class="upload-demo"
-      action="https://jsonplaceholder.typicode.com/posts/"
-      :on-preview="handlePreview"
-      :on-remove="handleRemove"
-      :before-upload="beforeUpload"
-      :before-remove="beforeRemove"
-      multiple
-      :limit="3"
-      :on-exceed="handleExceed"
-      :file-list="fileList"
-    >
-      <el-button size="small" type="primary">点击上传</el-button>
-      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-    </el-upload>
+  <div style="width:100%">
+    <tree-transfer :title="['待选功能','已选功能']" :from_data='fromData'
+    :to_data='toData' :defaultProps="{label:'label'}"
+    @addBtn='add' @removeBtn='remove'
+    :mode='mode' height='540px' filter openAll>
+  </tree-transfer>
   </div>
 </template>
+
 <script>
+import treeTransfer from 'el-tree-transfer'; // 引入
 export default {
-  name: "mine",
+  components:{treeTransfer},
   data() {
     return {
-      jsona: [
+      mode: "transfer", // transfer addressList
+      fromData:[
         {
-          a: 1,
-          b: 2,
-          c: 3
+          id: "1",
+          pid: 0,
+          label: "一级 1",
+          children: [
+            {
+              id: "1-1",
+              pid: "1",
+              label: "二级 1-1",
+              children: [
+                {
+                  id: "1-1-2",
+                  pid: "1-1",
+                  children: [],
+                  label: "二级 1-1-2"
+                }
+              ]
+            },
+            {
+              id: "1-2",
+              pid: "1",
+              label: "二级 1-2",
+              children: [
+                {
+                  id: "1-2-1",
+                  pid: "1-2",
+                  children: [],
+                  label: "二级 1-2-1"
+                },
+                {
+                  id: "1-2-2",
+                  pid: "1-2",
+                  children: [],
+                  label: "二级 1-2-2"
+                }
+              ]
+            }
+          ]
         }
       ],
-      fileList: []
+      toData:[
+        {
+          id: "1",
+          pid: 0,
+          label: "一级 1",
+          children: [
+            {
+              id: "1-1",
+              pid: "1",
+              label: "二级 1-1",
+              disabled: true,
+              children: [
+                {
+                  id: "1-1-1",
+                  pid: "1-1",
+                  children: [],
+                  label: "二级 1-1-1"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     };
   },
-  methods: {
-    // 点击文件列表中已上传的文件时的钩子
-    handlePreview() {},
-    // 上传文件之前的钩子
-    beforeUpload() {},
-    // 文件列表移除文件时的钩子
-    handleRemove() {},
-    // 删除文件之前的钩子
-    beforeRemove() {},
-    // 文件超出个数限制的钩子
-    handleExceed() {},
-    changeAct() {
-      let obj = { a: 2, b: 3, c: 4 };
-      this.jsona = [Object.assign(this.jsona[0], obj)];
-      console.log(this.jsona);
-    },
-    listFunc() {
-      let result = this.permute([], [1, 2, 3]);
-      console.log(result);
-    },
-    permute(temArr, testArr) {
-      var permuteArr = [];
-      var arr = testArr;
-      function innerPermute(temArr) {
-        for (var i = 0, len = arr.length; i < len; i++) {
-          if (temArr.length === len - 1) {
-            if (temArr.indexOf(arr[i]) < 0) {
-              permuteArr.push(temArr.concat(arr[i]));
-            }
-            continue;
-          }
-          if (temArr.indexOf(arr[i]) < 0) {
-            innerPermute(temArr.concat(arr[i]));
-          }
-        }
+  methods:{
+    // 切换模式 现有树形穿梭框模式transfer 和通讯录模式addressList
+    changeMode() {
+      if (this.mode === "transfer") {
+        this.mode = "addressList";
+      } else {
+        this.mode = "transfer";
       }
-      innerPermute(temArr);
-      return permuteArr;
+    },
+    // 监听穿梭框组件添加
+    add(fromData, toData, obj) {
+      // 树形穿梭框模式transfer时，返回参数为左侧树移动后数据、右侧树移动后数据、移动的{keys,nodes,halfKeys,halfNodes}对象
+      // 通讯录模式addressList时，返回参数为右侧收件人列表、右侧抄送人列表、右侧密送人列表
+      console.log("fromData:", fromData);
+      console.log("toData:", toData);
+      console.log("obj:", obj);
+    },
+    // 监听穿梭框组件移除
+    remove(fromData, toData, obj) {
+      // 树形穿梭框模式transfer时，返回参数为左侧树移动后数据、右侧树移动后数据、移动的{keys,nodes,halfKeys,halfNodes}对象
+      // 通讯录模式addressList时，返回参数为右侧收件人列表、右侧抄送人列表、右侧密送人列表
+      console.log("fromData:", fromData);
+      console.log("toData:", toData);
+      console.log("obj:", obj);
     }
-  }
+  },
+  comporents:{ treeTransfer } // 注册
 };
 </script>
 
-<style lang="less" scoped>
-p {
-  color: wheat;
-}
-.box {
-  width: 100px;
-  height: 100px;
-  position: relative;
-  background: sandybrown;
-  right: 0;
-}
-.box:hover {
-  transition: 3s;
-  background: black;
-  right: -150px;
-}
+<style>
+
 </style>

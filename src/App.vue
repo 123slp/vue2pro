@@ -4,32 +4,47 @@
       <h3></h3>
     </header>
     <section>
-      <router-view/>
+      <router-view></router-view>
     </section>
     <footer>
-      <router-link to="/"><i class="iconfont icon-shouye"></i>首页</router-link>
-      <router-link to="/discover"><i class="iconfont icon-faxian"></i>发现</router-link>
-      <router-link to="/setting"><i class="iconfont icon-shezhi"></i>设置</router-link>
-      <router-link to="/mine"><i class="iconfont icon-wode"></i>我的</router-link>
+      <router-link to="/">
+        <i class="iconfont icon-shouye"></i>
+        首页
+      </router-link>
+      <router-link to="/discover">
+        <i class="iconfont icon-faxian"></i>
+        发现
+      </router-link>
+      <router-link to="/setting">
+        <i class="iconfont icon-shezhi"></i>
+        设置
+      </router-link>
+      <router-link to="/mine">
+        <i class="iconfont icon-wode"></i>
+        我的
+      </router-link>
     </footer>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: "App",
+  data() {
+    return {};
+  },
+
+  methods: {},
+  mounted() {
+    console.log(this.$store);
+  }
 };
 </script>
 
 <style lang="less">
-@import './less/reset.less';
-html{
-  height: 100%;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-}
-body{
+@import "./less/reset.less";
+html,
+body {
   height: 100%;
   width: 100%;
   padding: 0;
@@ -41,39 +56,27 @@ body{
   width: 100%;
   height: 100%;
   background: black;
-  header{
+  header {
     width: 100%;
-    h3{
-      // margin: 0;
-      // padding: 0;
+    h3 {
+      color: #fff;
       width: 100%;
       text-align: center;
-    background: saddlebrown;
-    height: 84px;
-    // display: flex;
-    // justify-content: center;
-    line-height: 84px;
-    // position: absolute;
-    // top: 0;
-    // left: 0;
+      background: saddlebrown;
+      height: 84px;
+      line-height: 84px;
     }
   }
-  section{
+  section {
     width: 100%;
-    // height: 100%;
     flex: 1;
-    // position: absolute;
-    // left: 0;
-    // top: 100px;
+    display: flex;
     background: #ccc;
-    // margin: 84px 0 50px 0;
+    overflow: auto;
   }
-  footer{
+  footer {
     background: pink;
     width: 100%;
-    // position: absolute;
-    // left: 0;
-    // bottom: 0;
     display: flex;
     justify-content: space-around;
     height: 49px;
@@ -81,7 +84,7 @@ body{
     border-top: 1px solid #ccc;
     display: flex;
     justify-content: space-around;
-    a{
+    a {
       text-align: center;
       flex: 1;
       line-height: 49px;
